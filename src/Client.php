@@ -30,6 +30,11 @@ class Client
     public $aliases;
 
     /**
+     * @var MultiSearch
+     */
+    public MultiSearch $multiSearch;
+
+    /**
      * Client constructor.
      *
      * @param   array  $config
@@ -41,6 +46,7 @@ class Client
         $this->config      = new Configuration($config);
         $this->collections = new Collections($this->config);
         $this->aliases     = new Aliases($this->config);
+        $this->multiSearch = new MultiSearch($this->config);
     }
 
     /**

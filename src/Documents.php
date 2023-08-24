@@ -32,6 +32,11 @@ class Documents implements \ArrayAccess
     private $apiCall;
 
     /**
+     * @var \Devloops\Typesence\ApiCallv4
+     */
+    private $apiCallv4;
+
+    /**
      * @var array
      */
     private $documents = [];
@@ -47,6 +52,7 @@ class Documents implements \ArrayAccess
         $this->config         = $config;
         $this->collectionName = $collectionName;
         $this->apiCall        = new ApiCall($config);
+        $this->apiCallv4      = new ApiCallv4($config);
     }
 
     /**
@@ -158,4 +164,56 @@ class Documents implements \ArrayAccess
         $this->documents[$offset] = $value;
     }
 
+    /**
+     * @param   array  $document
+     *
+     * @return array
+     * @throws \Devloops\Typesence\Exceptions\TypesenseClientError
+     */
+    public function upsert(array $document): array
+    {
+        $path = sprintf(
+            '%s/%s/%s%s',
+            Collections::RESOURCE_PATH,
+            $this->collectionName,
+            self::RESOURCE_PATH,
+            '?action=upsert'
+          );
+        return $this->apiCall->post($path, $document);
+    }
+
+    /**
+     * @param array $document
+     * @param array $options
+     *
+     * @return array
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function update(array $document, array $options = []): array
+    {
+        $path = sprintf(
+            '%s/%s/%s',
+            Collections::RESOURCE_PATH,
+            $this->collectionName,
+            self::RESOURCE_PATH,
+        );
+
+        return $this->apiCallv4->patch(
+            $path,
+            $document,
+            true,
+            array_merge($options)
+        );
+    }
+
+    /**
+     * @param array $queryParams
+     *
+     * @return array
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function delete(array $queryParams = []): array
+    {
+        return $this->apiCallv4->delete($this->endPointPath(), true, $queryParams);
+    }
 }
