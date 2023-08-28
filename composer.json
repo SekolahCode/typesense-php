@@ -1,5 +1,5 @@
 {
-  "name": "sekolahcode/typesens-php",
+  "name": "sekolahcode/typesense-php",
   "description": "PHP client for Typesense https://github.com/typesense/typesense",
   "type": "library",
   "homepage": "https://www.devloops.net",
